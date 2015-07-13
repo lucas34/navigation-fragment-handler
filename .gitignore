@@ -50,5 +50,6 @@ Temporary Items
 /.idea/libraries
 /.idea/
 /build
+*.iml
 
 massive_lib/build
