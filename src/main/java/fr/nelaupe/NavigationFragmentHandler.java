@@ -28,14 +28,20 @@ import android.os.Bundle;
  * Date 24/03/15
  */
 @SuppressWarnings("unused")
-public class NavigationFragmentHandler<TActivity extends Activity> {
+public class NavigationFragmentHandler {
 
-    private final TActivity _self;
+    private final FragmentManager _fm;
     private final int _content;
     private FragmentChangeListener _changeListener;
 
-    public NavigationFragmentHandler(TActivity self, int content) {
-        _self = self;
+    public NavigationFragmentHandler(Activity activity, int content) {
+        _fm = activity.getFragmentManager();
+        _content = content;
+        _changeListener = null;
+    }
+
+    public NavigationFragmentHandler(FragmentManager fragmentManager, int content) {
+        _fm = fragmentManager;
         _content = content;
         _changeListener = null;
     }
@@ -44,9 +50,8 @@ public class NavigationFragmentHandler<TActivity extends Activity> {
         if (_changeListener != null) {
             _changeListener.onChangeContent();
         }
-        FragmentManager fm = _self.getFragmentManager();
-        removeBackStack(fm);
-        FragmentTransaction ft = fm.beginTransaction();
+        removeBackStack(_fm);
+        FragmentTransaction ft = _fm.beginTransaction();
         ft.replace(_content, target);
         ft.commit();
     }
@@ -55,9 +60,8 @@ public class NavigationFragmentHandler<TActivity extends Activity> {
         if (_changeListener != null) {
             _changeListener.onChangeContent();
         }
-        FragmentManager fm = _self.getFragmentManager();
-        removeBackStack(fm);
-        FragmentTransaction ft = fm.beginTransaction();
+        removeBackStack(_fm);
+        FragmentTransaction ft = _fm.beginTransaction();
         ft.replace(_content, target);
         ft.addToBackStack(target.toString());
         ft.commit();
@@ -67,9 +71,8 @@ public class NavigationFragmentHandler<TActivity extends Activity> {
         if (_changeListener != null) {
             _changeListener.onChangeContent();
         }
-        FragmentManager fm = _self.getFragmentManager();
-        removeBackStack(fm);
-        FragmentTransaction ft = fm.beginTransaction();
+        removeBackStack(_fm);
+        FragmentTransaction ft = _fm.beginTransaction();
         target.setArguments(args);
         ft.replace(_content, target);
         ft.addToBackStack(target.toString());
@@ -80,8 +83,7 @@ public class NavigationFragmentHandler<TActivity extends Activity> {
         if (_changeListener != null) {
             _changeListener.onChangeContent();
         }
-        FragmentManager fm = _self.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
+        FragmentTransaction ft = _fm.beginTransaction();
         ft.replace(_content, target);
         ft.addToBackStack(target.toString());
         ft.commit();
@@ -91,8 +93,7 @@ public class NavigationFragmentHandler<TActivity extends Activity> {
         if (_changeListener != null) {
             _changeListener.onChangeContent();
         }
-        FragmentManager fm = _self.getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
+        FragmentTransaction ft = _fm.beginTransaction();
         target.setArguments(args);
         ft.replace(_content, target);
         ft.addToBackStack(target.toString());
@@ -103,18 +104,17 @@ public class NavigationFragmentHandler<TActivity extends Activity> {
         if (_changeListener != null) {
             _changeListener.onChangeContent();
         }
-        FragmentManager fm = _self.getFragmentManager();
-        fm.popBackStackImmediate();
+        _fm.popBackStackImmediate();
     }
 
     private void removeBackStack(FragmentManager fm) {
-        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-            fm.popBackStack();
+        for (int i = 0; i < _fm.getBackStackEntryCount(); ++i) {
+            _fm.popBackStack();
         }
     }
 
     public int getDeepness() {
-        return _self.getFragmentManager().getBackStackEntryCount();
+        return _fm.getBackStackEntryCount();
     }
 
 
