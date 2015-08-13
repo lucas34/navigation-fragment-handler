@@ -28,16 +28,20 @@ import android.os.Bundle;
  * Date 24/03/15
  */
 @SuppressWarnings("unused")
-public class NavigationFragmentHandler {
+public class NavigationFragmentHandler implements FragmentManager.OnBackStackChangedListener {
 
     private final FragmentManager _fm;
     private final int _content;
     private FragmentChangeListener _changeListener;
 
+    private boolean isPopAction;
+
     public NavigationFragmentHandler(Activity activity, int content) {
         _fm = activity.getFragmentManager();
+        _fm.addOnBackStackChangedListener(this);
         _content = content;
         _changeListener = null;
+        isPopAction = false;
     }
 
     public NavigationFragmentHandler(FragmentManager fragmentManager, int content) {
@@ -48,62 +52,60 @@ public class NavigationFragmentHandler {
 
     public void showMain(Fragment target) {
         if (_changeListener != null) {
-            _changeListener.onChangeContent();
+            _changeListener.onChangeContent(target);
         }
         removeBackStack(_fm);
         FragmentTransaction ft = _fm.beginTransaction();
-        ft.replace(_content, target);
+        ft.replace(_content, target, generateTag());
         ft.commit();
     }
 
     public void replaceContent(Fragment target) {
         if (_changeListener != null) {
-            _changeListener.onChangeContent();
+            _changeListener.onChangeContent(target);
         }
         removeBackStack(_fm);
         FragmentTransaction ft = _fm.beginTransaction();
-        ft.replace(_content, target);
+        ft.replace(_content, target, generateTag());
         ft.addToBackStack(target.toString());
         ft.commit();
     }
 
     public void replaceContent(Fragment target, Bundle args) {
         if (_changeListener != null) {
-            _changeListener.onChangeContent();
+            _changeListener.onChangeContent(target);
         }
         removeBackStack(_fm);
         FragmentTransaction ft = _fm.beginTransaction();
         target.setArguments(args);
-        ft.replace(_content, target);
+        ft.replace(_content, target, generateTag());
         ft.addToBackStack(target.toString());
         ft.commit();
     }
 
     public void pushContent(Fragment target) {
         if (_changeListener != null) {
-            _changeListener.onChangeContent();
+            _changeListener.onChangeContent(target);
         }
         FragmentTransaction ft = _fm.beginTransaction();
-        ft.replace(_content, target);
+        ft.replace(_content, target, generateTag());
         ft.addToBackStack(target.toString());
         ft.commit();
     }
 
     public void pushContent(Fragment target, Bundle args) {
         if (_changeListener != null) {
-            _changeListener.onChangeContent();
+            _changeListener.onChangeContent(target);
         }
         FragmentTransaction ft = _fm.beginTransaction();
         target.setArguments(args);
-        ft.replace(_content, target);
+        ft.replace(_content, target, generateTag());
         ft.addToBackStack(target.toString());
         ft.commit();
     }
 
     public void popCurrentFragment() {
-        if (_changeListener != null) {
-            _changeListener.onChangeContent();
-        }
+        isPopAction = true;
         _fm.popBackStackImmediate();
     }
 
@@ -122,4 +124,21 @@ public class NavigationFragmentHandler {
         _changeListener = listener;
     }
 
+    @Override
+    public void onBackStackChanged() {
+        if(isPopAction) {
+            isPopAction = false;
+            if (_changeListener != null) {
+                _changeListener.onChangeContent(getCurrentFragment());
+            }
+        }
+    }
+
+    private String generateTag() {
+        return "NAVIGATION_FRAGMENT_HANDLER"+(getDeepness()+1);
+    }
+
+    private Fragment getCurrentFragment() {
+        return _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER"+(getDeepness()));
+    }
 }

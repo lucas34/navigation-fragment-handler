@@ -16,6 +16,8 @@
 
 package fr.nelaupe;
 
+import android.app.Fragment;
+
 /**
  * Created with IntelliJ
  * Created by Lucas Nelaupe
@@ -23,6 +25,6 @@ package fr.nelaupe;
  */
 public interface FragmentChangeListener {
 
-    void onChangeContent();
+    void onChangeContent(Fragment fragment);
 
 }
