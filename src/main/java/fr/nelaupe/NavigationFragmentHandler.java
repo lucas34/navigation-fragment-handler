@@ -27,12 +27,12 @@ import android.os.Bundle;
  * Created by Lucas Nelaupe
  * Date 24/03/15
  */
-@SuppressWarnings("unused")
-public class NavigationFragmentHandler {
+@SuppressWarnings({"unused", "unchecked"})
+public class NavigationFragmentHandler<TFragment extends Fragment> {
 
     private final FragmentManager _fm;
     private final int _content;
-    private FragmentChangeListener _changeListener;
+    private FragmentChangeListener<TFragment> _changeListener;
 
     public NavigationFragmentHandler(Activity activity, int content) {
         _fm = activity.getFragmentManager();
@@ -46,7 +46,7 @@ public class NavigationFragmentHandler {
         _changeListener = null;
     }
 
-    public void showMain(Fragment target) {
+    public void showMain(TFragment target) {
         if (_changeListener != null) {
             _changeListener.onChangeContent(target);
         }
@@ -56,7 +56,7 @@ public class NavigationFragmentHandler {
         ft.commit();
     }
 
-    public void replaceContent(Fragment target) {
+    public void replaceContent(TFragment target) {
         if (_changeListener != null) {
             _changeListener.onChangeContent(target);
         }
@@ -67,7 +67,7 @@ public class NavigationFragmentHandler {
         ft.commit();
     }
 
-    public void replaceContent(Fragment target, Bundle args) {
+    public void replaceContent(TFragment target, Bundle args) {
         if (_changeListener != null) {
             _changeListener.onChangeContent(target);
         }
@@ -79,7 +79,7 @@ public class NavigationFragmentHandler {
         ft.commit();
     }
 
-    public void pushContent(Fragment target) {
+    public void pushContent(TFragment target) {
         if (_changeListener != null) {
             _changeListener.onChangeContent(target);
         }
@@ -89,7 +89,7 @@ public class NavigationFragmentHandler {
         ft.commit();
     }
 
-    public void pushContent(Fragment target, Bundle args) {
+    public void pushContent(TFragment target, Bundle args) {
         if (_changeListener != null) {
             _changeListener.onChangeContent(target);
         }
@@ -117,7 +117,7 @@ public class NavigationFragmentHandler {
         return _fm.getBackStackEntryCount();
     }
 
-    public void setOnFragmentChangeListener(FragmentChangeListener listener) {
+    public void setOnFragmentChangeListener(FragmentChangeListener<TFragment> listener) {
         _changeListener = listener;
     }
 
@@ -125,16 +125,16 @@ public class NavigationFragmentHandler {
         return "NAVIGATION_FRAGMENT_HANDLER" + (offset);
     }
 
-    private Fragment getPreviousFragment() {
+    private TFragment getPreviousFragment() {
         if (getDeepness() == 0) {
-            return _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER0");
+            return (TFragment) _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER0");
         } else {
-            return _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER" + (getDeepness() - 1));
+            return (TFragment) _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER" + (getDeepness() - 1));
         }
     }
 
-    public Fragment getCurrentFragment() {
-        return _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER" + (getDeepness()));
+    public TFragment getCurrentFragment() {
+        return (TFragment) _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER" + (getDeepness()));
     }
 
 }

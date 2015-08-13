@@ -23,8 +23,8 @@ import android.app.Fragment;
  * Created by Lucas Nelaupe
  * Date 26/03/15
  */
-public interface FragmentChangeListener {
+public interface FragmentChangeListener<TFragment extends Fragment> {
 
-    void onChangeContent(Fragment fragment);
+    void onChangeContent(TFragment fragment);
 
 }
