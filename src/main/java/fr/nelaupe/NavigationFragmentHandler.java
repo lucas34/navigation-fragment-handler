@@ -28,20 +28,16 @@ import android.os.Bundle;
  * Date 24/03/15
  */
 @SuppressWarnings("unused")
-public class NavigationFragmentHandler implements FragmentManager.OnBackStackChangedListener {
+public class NavigationFragmentHandler {
 
     private final FragmentManager _fm;
     private final int _content;
     private FragmentChangeListener _changeListener;
 
-    private boolean isPopAction;
-
     public NavigationFragmentHandler(Activity activity, int content) {
         _fm = activity.getFragmentManager();
-        _fm.addOnBackStackChangedListener(this);
         _content = content;
         _changeListener = null;
-        isPopAction = false;
     }
 
     public NavigationFragmentHandler(FragmentManager fragmentManager, int content) {
@@ -56,7 +52,7 @@ public class NavigationFragmentHandler implements FragmentManager.OnBackStackCha
         }
         removeBackStack(_fm);
         FragmentTransaction ft = _fm.beginTransaction();
-        ft.replace(_content, target, generateTag());
+        ft.replace(_content, target, generateTag(0));
         ft.commit();
     }
 
@@ -66,7 +62,7 @@ public class NavigationFragmentHandler implements FragmentManager.OnBackStackCha
         }
         removeBackStack(_fm);
         FragmentTransaction ft = _fm.beginTransaction();
-        ft.replace(_content, target, generateTag());
+        ft.replace(_content, target, generateTag(1));
         ft.addToBackStack(target.toString());
         ft.commit();
     }
@@ -78,7 +74,7 @@ public class NavigationFragmentHandler implements FragmentManager.OnBackStackCha
         removeBackStack(_fm);
         FragmentTransaction ft = _fm.beginTransaction();
         target.setArguments(args);
-        ft.replace(_content, target, generateTag());
+        ft.replace(_content, target, generateTag(1));
         ft.addToBackStack(target.toString());
         ft.commit();
     }
@@ -88,7 +84,7 @@ public class NavigationFragmentHandler implements FragmentManager.OnBackStackCha
             _changeListener.onChangeContent(target);
         }
         FragmentTransaction ft = _fm.beginTransaction();
-        ft.replace(_content, target, generateTag());
+        ft.replace(_content, target, generateTag(getDeepness()+1));
         ft.addToBackStack(target.toString());
         ft.commit();
     }
@@ -99,13 +95,15 @@ public class NavigationFragmentHandler implements FragmentManager.OnBackStackCha
         }
         FragmentTransaction ft = _fm.beginTransaction();
         target.setArguments(args);
-        ft.replace(_content, target, generateTag());
+        ft.replace(_content, target, generateTag(getDeepness()+1));
         ft.addToBackStack(target.toString());
         ft.commit();
     }
 
     public void popCurrentFragment() {
-        isPopAction = true;
+        if (_changeListener != null) {
+            _changeListener.onChangeContent(getPreviousFragment());
+        }
         _fm.popBackStackImmediate();
     }
 
@@ -119,26 +117,24 @@ public class NavigationFragmentHandler implements FragmentManager.OnBackStackCha
         return _fm.getBackStackEntryCount();
     }
 
-
     public void setOnFragmentChangeListener(FragmentChangeListener listener) {
         _changeListener = listener;
     }
 
-    @Override
-    public void onBackStackChanged() {
-        if(isPopAction) {
-            isPopAction = false;
-            if (_changeListener != null) {
-                _changeListener.onChangeContent(getCurrentFragment());
-            }
+    private String generateTag(int offset) {
+        return "NAVIGATION_FRAGMENT_HANDLER"+(offset);
+    }
+
+    private Fragment getPreviousFragment() {
+        if(getDeepness() == 0) {
+            return _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER0");
+        } else {
+            return _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER"+(getDeepness()-1));
         }
     }
 
-    private String generateTag() {
-        return "NAVIGATION_FRAGMENT_HANDLER"+(getDeepness()+1);
-    }
-
-    private Fragment getCurrentFragment() {
+    public Fragment getCurrentFragment() {
         return _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER"+(getDeepness()));
     }
+
 }
