@@ -4,7 +4,7 @@ Easiest way to manage fragment with a drawer and back button on Android
 
 ## Add Dependency
 
-<a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22fr.nelaupe%22a%3A%22navigation-fragment-handler%22'><img src='http://img.shields.io/maven-central/v/fr.nelaupe/navigation-fragment-handler.svg'></a>
+<a href='http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22fr.nelaupe%22%20AND%20a%3A%22navigation-fragment-handler%22'><img src='http://img.shields.io/maven-central/v/fr.nelaupe/navigation-fragment-handler.svg'></a>
 
 **Gradle dependency**
 
