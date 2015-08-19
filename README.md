@@ -1,10 +1,10 @@
-# Navigation Fragment Handler
+# Navigation Fragment Handler for Android
 
-Easiest way to manage fragment with a drawer and back button.
+Easiest way to manage fragment with a drawer and back button on Android
 
 ## Add Dependency
 
-<a href='http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22navigation-fragment-handler%22'><img src='http://img.shields.io/maven-central/v/fr.nelaupe/navigation-fragment-handler.svg'></a>
+<a href='http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22fr.nelaupe%22a%3A%22navigation-fragment-handler%22'><img src='http://img.shields.io/maven-central/v/fr.nelaupe/navigation-fragment-handler.svg'></a>
 
 **Gradle dependency**
 
