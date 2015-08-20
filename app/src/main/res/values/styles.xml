@@ -1,0 +1,16 @@
+<resources>
+
+    <color name="my_awesome_color">#1d85e0</color>
+    <color name="my_awesome_darker_color">#0e66da</color>
+    <color name="accent">#1d82dd</color>
+    <color name="background">#FFFFFF</color>
+
+    <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+        <item name="colorPrimary">@color/my_awesome_color</item>
+        <item name="colorPrimaryDark">@color/my_awesome_darker_color</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+
+</resources>

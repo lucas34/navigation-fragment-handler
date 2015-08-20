@@ -1,0 +1,4 @@
+include ':app'
+
+include':navigation-fragment-handler'
+project(':navigation-fragment-handler').projectDir = new File('library')

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+      <item
+          android:id="@+id/menu_home"
+          android:title="@string/app_name"/>
+
+      <item android:title="Section 1">
+            <menu>
+                  <item
+                      android:id="@+id/fragment_1"
+                      android:title="Fragment 1"/>
+
+                  <item
+                      android:id="@+id/fragment_2"
+                      android:title="Fragment 2"/>
+
+                  <item
+                      android:id="@+id/fragment_3"
+                      android:title="Fragment 3"/>
+
+            </menu>
+      </item>
+
+      <item
+          android:title="Section 2">
+
+            <menu>
+
+                  <item
+                      android:id="@+id/fragment_4"
+                      android:title="Fragment 4"/>
+
+                  <item
+                      android:id="@+id/fragment_5"
+                      android:title="Fragment 5"/>
+
+                  <item
+                      android:id="@+id/fragment_6"
+                      android:title="Fragment 6"/>
+            </menu>
+
+      </item>
+
+</menu>
