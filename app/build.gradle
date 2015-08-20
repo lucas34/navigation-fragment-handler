@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile project(":navigation-fragment-handler")
+    compile project(":library")
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:cardview-v7:22.2.1'
     compile 'com.android.support:support-v4:21.0.3'
