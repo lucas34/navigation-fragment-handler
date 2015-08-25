@@ -47,63 +47,34 @@ public class NavigationFragmentHandler<TFragment extends Fragment> {
     }
 
     public void showMain(TFragment target) {
-        if (_changeListener != null) {
-            _changeListener.onChangeContent(target);
-        }
+        notifyChange(target);
         removeBackStack(_fm);
-        FragmentTransaction ft = _fm.beginTransaction();
-        ft.replace(_content, target, generateTag(0));
-        ft.commit();
+        transactionReplace(target, generateTag(0));
     }
 
     public void replaceContent(TFragment target) {
-        if (_changeListener != null) {
-            _changeListener.onChangeContent(target);
-        }
-        removeBackStack(_fm);
-        FragmentTransaction ft = _fm.beginTransaction();
-        ft.replace(_content, target, generateTag(1));
-        ft.addToBackStack(target.toString());
-        ft.commit();
+        replaceContent(target, null);
     }
 
     public void replaceContent(TFragment target, Bundle args) {
-        if (_changeListener != null) {
-            _changeListener.onChangeContent(target);
-        }
+        notifyChange(target);
         removeBackStack(_fm);
-        FragmentTransaction ft = _fm.beginTransaction();
         target.setArguments(args);
-        ft.replace(_content, target, generateTag(1));
-        ft.addToBackStack(target.toString());
-        ft.commit();
+        transactionReplace(target, generateTag(1));
     }
 
     public void pushContent(TFragment target) {
-        if (_changeListener != null) {
-            _changeListener.onChangeContent(target);
-        }
-        FragmentTransaction ft = _fm.beginTransaction();
-        ft.replace(_content, target, generateTag(getDeepness() + 1));
-        ft.addToBackStack(target.toString());
-        ft.commit();
+        pushContent(target, null);
     }
 
     public void pushContent(TFragment target, Bundle args) {
-        if (_changeListener != null) {
-            _changeListener.onChangeContent(target);
-        }
-        FragmentTransaction ft = _fm.beginTransaction();
+        notifyChange(target);
         target.setArguments(args);
-        ft.replace(_content, target, generateTag(getDeepness() + 1));
-        ft.addToBackStack(target.toString());
-        ft.commit();
+        transactionReplace(target, generateTag(getDeepness() + 1));
     }
 
     public void popCurrentFragment() {
-        if (_changeListener != null) {
-            _changeListener.onChangeContent(getPreviousFragment());
-        }
+        notifyChange(getPreviousFragment());
         _fm.popBackStackImmediate();
     }
 
@@ -121,6 +92,10 @@ public class NavigationFragmentHandler<TFragment extends Fragment> {
         _changeListener = listener;
     }
 
+    public TFragment getCurrentFragment() {
+        return (TFragment) _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER" + (getDeepness()));
+    }
+
     private String generateTag(int offset) {
         return "NAVIGATION_FRAGMENT_HANDLER" + (offset);
     }
@@ -133,8 +108,17 @@ public class NavigationFragmentHandler<TFragment extends Fragment> {
         }
     }
 
-    public TFragment getCurrentFragment() {
-        return (TFragment) _fm.findFragmentByTag("NAVIGATION_FRAGMENT_HANDLER" + (getDeepness()));
+    private void transactionReplace(TFragment target, String tag) {
+        FragmentTransaction ft = _fm.beginTransaction();
+        ft.replace(_content, target, tag);
+        ft.addToBackStack(target.toString());
+        ft.commit();
+    }
+
+    private void notifyChange(TFragment fragment) {
+        if (_changeListener != null) {
+            _changeListener.onChangeContent(fragment);
+        }
     }
 
 }
